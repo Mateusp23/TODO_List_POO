@@ -1,6 +1,5 @@
 package com.example.listatodo_poo;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -77,16 +76,15 @@ public class AddNewTask extends BottomSheetDialogFragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @SuppressLint("ResourceType")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.toString().equals("")){
                     newTaskSaveButton.setEnabled(false);
-                    newTaskSaveButton.setTextColor(Color.WHITE);
+                    newTaskSaveButton.setTextColor(Color.GRAY);
                 }
                 else{
                     newTaskSaveButton.setEnabled(true);
-                    newTaskSaveButton.setTextColor(ContextCompat.getColor(requireContext(), R.drawable.ic_bnt_radius));
+                    newTaskSaveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_background));
                 }
             }
 
