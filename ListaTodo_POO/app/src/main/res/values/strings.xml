@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">ListaTodo_POO</string>
+    <string name="app_name">ToDo List</string>
+    <string name="salvar">Salvar</string>
+    <string name="nova_tarefa">Nova Tarefa</string>
+    <string name="tasks">Tarefa</string>
+    <string name="deletar_tarefa">Deletar Tarefa</string>
+    <string name="confirmacao_delete_tarefa">Você tem certeza que deseja apagar esta tarefa?</string>
+    <string name="confirmar_tarefa_del">Confirmar</string>
 </resources>

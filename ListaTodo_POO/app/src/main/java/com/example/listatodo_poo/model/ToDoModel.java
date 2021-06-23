@@ -1,10 +1,8 @@
 package com.example.listatodo_poo.model;
 
 public class ToDoModel {
-
     private int id, status;
-    private String tarefa;
-
+    private String task;
 
     public int getId() {
         return id;
@@ -22,11 +20,11 @@ public class ToDoModel {
         this.status = status;
     }
 
-    public String getTarefa() {
-        return tarefa;
+    public String getTask() {
+        return task;
     }
 
-    public void setTarefa(String tarefa) {
-        this.tarefa = tarefa;
+    public void setTask(String task) {
+        this.task = task;
     }
 }

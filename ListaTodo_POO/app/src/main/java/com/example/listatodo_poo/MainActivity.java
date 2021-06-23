@@ -1,33 +1,31 @@
 package com.example.listatodo_poo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.listatodo_poo.Adapter.ToDoAdapter;
+import com.example.listatodo_poo.adapter.ToDoAdapter;
 import com.example.listatodo_poo.model.ToDoModel;
-import com.google.android.material.textfield.TextInputEditText;
+import com.example.listatodo_poo.api.Database;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DialogCloseListener {
 
-    private RecyclerView rvTarefas;
-    private ToDoAdapter tarefasAdapter;
+    private Database db; // instanciando classe bd
 
-    private List<ToDoModel> tarefasList;
+    private RecyclerView tasksRv;
+    private ToDoAdapter tasksAdapter;
+    private FloatingActionButton fab;
 
+    private List<ToDoModel> taskList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,28 +33,38 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        tarefasList = new ArrayList<>();
+        db = new Database(this);
+        db.openDatabase();
 
-        rvTarefas = findViewById(R.id.rvTarefas);
-        rvTarefas.setLayoutManager(new LinearLayoutManager(this));
+        tasksRv = findViewById(R.id.tasksRecyclerView);
+        tasksRv.setLayoutManager(new LinearLayoutManager(this));
+        tasksAdapter = new ToDoAdapter(db,MainActivity.this);
+        tasksRv.setAdapter(tasksAdapter);
 
-        tarefasAdapter = new ToDoAdapter(this);
-        rvTarefas.setAdapter(tarefasAdapter);
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new RVTouchTask(tasksAdapter));
+        itemTouchHelper.attachToRecyclerView(tasksRv);
 
-        ToDoModel tarefas = new ToDoModel();
-        tarefas.setTarefa("testando tarefda");
-        tarefas.setStatus(0);
-        tarefas.setId(1);
+        fab = findViewById(R.id.fab);
 
-        tarefasList.add(tarefas);
-        tarefasList.add(tarefas);
-        tarefasList.add(tarefas);
-        tarefasList.add(tarefas);
-        tarefasList.add(tarefas);
-        tarefasList.add(tarefas);
-        tarefasList.add(tarefas);
-        tarefasList.add(tarefas);
+        taskList = db.getAllTasks();
+        Collections.reverse(taskList);
 
-        tarefasAdapter.setTarefas(tarefasList);
+        tasksAdapter.setTasks(taskList);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddNewTask.newInstance().show(getSupportFragmentManager(), AddNewTask.TAG);
+            }
+        });
+    }
+
+    @Override
+    public void handleDialogClose(DialogInterface dialog){
+        taskList = db.getAllTasks();
+        Collections.reverse(taskList);
+        tasksAdapter.setTasks(taskList);
+        tasksAdapter.notifyDataSetChanged();
     }
 }
